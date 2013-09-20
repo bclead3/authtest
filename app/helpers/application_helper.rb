@@ -33,9 +33,9 @@ module ApplicationHelper
       item_name = item['name']
       item_id = item['id']
       friend_url = 'https://graph.facebook.com/'+item_id+'?access_token='+user.provider_authentication.token
-      string_output += '<li class="friend_link">' + link_to( item_name, friend_url) + '<br/>'
+      string_output += '<li class="friend_link" data_fb_id="'+item_id+'">' + link_to( item_name, friend_url) + '</li><br/>'
       #TODO: export this to a JQuery ajax call...
-      string_output += get_friend_details( item_id, user )
+      #string_output += get_friend_details( item_id, user )
     end
     string_output += '</ul>'
     string_output.html_safe

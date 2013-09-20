@@ -14,7 +14,9 @@ Authtest::Application.routes.draw do
     get '/logout', to: 'devise/sessions#destroy'
   end
 
-  resources :users
+  resources :users do
+    get 'retrieve_friend_info'
+  end
 
   match '/auth/:provider/callback' => 'authentications#create'
 
@@ -64,10 +66,6 @@ Authtest::Application.routes.draw do
   #     # (app/controllers/admin/products_controller.rb)
   #     resources :products
   #   end
-
-  # You can have the root of your site routed with "root"
-  # just remember to delete public/index.bakhtml.
-
 
   # See how all your routes lay out with "rake routes"
 
