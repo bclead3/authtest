@@ -1,0 +1,10 @@
+<ul>
+  <li>
+    <div class='user_name'>
+      <%- unless @user.nil? %>
+      <span><%= @user.name %> <%= @user.email %> <%= image_tag( @user.avatar, class:'user_image')%></span>
+        <%= get_friends(@user) %>
+      <% end %>
+    </div>
+  </li>
+</ul>

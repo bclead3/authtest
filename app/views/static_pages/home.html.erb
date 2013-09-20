@@ -1,0 +1,15 @@
+<div class="center hero-unit">
+  <%= link_to image_tag("Stretch.jpg", alt: "Author", height: 150, width: 200), 'http://trackif.com/', class:'author_image' %>
+  <h1>Welcome to the Authentication Test</h1>
+
+  <h2>
+    This application tests Devise and OmniAuth registration.
+  </h2>
+
+  <%- unless user_signed_in? %>
+    <%= link_to "Sign up now!", signup_path, class: "btn btn-large btn-primary" %>
+    or
+    <%= link_to "Sign in!", signin_path, class: "btn btn-large btn-primary" %>
+  <% end -%>
+</div>
+
