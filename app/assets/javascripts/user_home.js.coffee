@@ -1,4 +1,17 @@
 $(document).ready ->
+  item_count = $('li.friend_link').length
+  if item_count > 0
+    url_a = location.pathname.split("/")
+    $('li.friend_link').each (i) ->
+      fb_id = $(this).attr('data_fb_id')
+      $.ajax
+        url: url_a[2]+"/retrieve_friend_photo"
+        data:
+          friend_id: fb_id
+        dataType: 'json'
+        cache: false
+        complete: (xhr, status) ->
+          $('[data_fb_id='+fb_id+']').append(xhr.responseText)
 
   $('li.friend_link').click ->
     if $(this).hasClass('empty') or $(this).hasClass('ajaxed')

@@ -21,4 +21,9 @@ class UsersController < ApplicationController
     return_html = get_friend_details( params[:friend_id], user )
     respond_with( return_html )
   end
+
+  def retrieve_friend_photo
+    return_html = get_friend_photo( params[:friend_id])
+    respond_with( return_html )
+  end
 end

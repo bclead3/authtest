@@ -59,4 +59,8 @@ module ApplicationHelper
     end
     string_output.html_safe
   end
+
+  def get_friend_photo( friend_id )
+    photo_url = '<img src="https://graph.facebook.com/'+friend_id+'/picture" alt="friend photo" />'.html_safe
+  end
 end
