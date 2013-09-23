@@ -63,4 +63,18 @@ module ApplicationHelper
   def get_friend_photo( friend_id )
     photo_url = '<img src="https://graph.facebook.com/'+friend_id+'/picture" alt="friend photo" />'.html_safe
   end
+
+  def get_posts( facebook_id = 'me', user )
+    string_output = '<div class="post_messages"><ul class="posts">'
+    response = HTTParty.get('https://graph.facebook.com/'+facebook_id+'/posts?access_token='+user.provider_authentication.token)
+    response_hash = response.parsed_response['data']
+    response_hash.each do |post_item|
+      string_output += '<li>'
+      string_output += '<img src="'+post_item['picture']+'" alt="">' if post_item['picture']
+      string_output += post_item['message'] if post_item['message']
+      string_output += '</li>'
+    end
+    string_output += '</ul></div>'
+    string_output.html_safe
+  end
 end

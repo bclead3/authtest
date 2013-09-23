@@ -26,4 +26,15 @@ class UsersController < ApplicationController
     return_html = get_friend_photo( params[:friend_id])
     respond_with( return_html )
   end
+
+  def retrieve_posts
+    user = User.find(params[:user_id])
+    return_html = ''
+    if params[:friend_id].blank?
+      return_html = get_posts( user )
+    else
+      return_html = get_posts(params[:friend_id], user )
+    end
+    respond_with( return_html )
+  end
 end

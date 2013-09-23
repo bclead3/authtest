@@ -17,6 +17,7 @@ Authtest::Application.routes.draw do
   resources :users do
     get 'retrieve_friend_info'
     get 'retrieve_friend_photo'
+    get 'retrieve_posts'
   end
 
   match '/auth/:provider/callback' => 'authentications#create'
