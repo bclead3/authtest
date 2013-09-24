@@ -39,10 +39,6 @@ $(document).ready ->
             fb_name: $(this).text()
           dataType: 'json'
           cache: false
-          success: (data) ->
-            console.log(data)
-          failure: (xhr, status, error) ->
-            console.log("there was a failure")
           complete: (xhr, status) ->
             $('[data_fb_id='+fb_id+']').append(xhr.responseText)
 
@@ -56,9 +52,22 @@ $(document).ready ->
         url: url_a[2]+"/retrieve_posts"
         dataType: 'json'
         cache: false
-        success: (data) ->
-          console.log(data)
-        failure: (xhr, status, error) ->
-          console.log("there was a failure")
         complete: (xhr, status) ->
           $('.user_name span').append(xhr.responseText)
+
+  $('#user_submit_action button').click ->
+    link_text = $('#user_bogus_link').val()
+    message_text = $('#user_bogus_message').val()
+    url_array = location.pathname.split("/")
+    url_link = url_array[2] + '/send_post'
+    $.ajax
+      url: url_link
+      dataType: 'json'
+      cache: false
+      data:
+        message: message_text
+        link: link_text
+      complete: (xhr, status) ->
+        $('#user_bogus_link').val('')
+        $('#user_bogus_message').val('')
+        $('.user_name span').append(xhr.responseText)

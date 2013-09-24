@@ -28,6 +28,7 @@ gem 'omniauth-google-oauth2'
 gem 'omniauth-twitter'
 gem 'omniauth-linkedin'
 gem 'bootstrap-sass'
+gem 'formtastic', "~> 2.2.1"
 gem 'foreman'
 #gem 'thin'
 

@@ -77,4 +77,20 @@ module ApplicationHelper
     string_output += '</ul></div>'
     string_output.html_safe
   end
+
+  def post_to_provider( message, link='', user )
+    if user
+      response = nil
+      user_token = user.provider_authentication.token
+      user_id = user.provider_authentication.uid
+      url = URI.escape("https://graph.facebook.com/#{user_id}/feed?access_token=#{user_token}")
+      unless link.blank?
+        response = HTTParty.post(url, query: { message: message, link: link })
+      else
+        response = HTTParty.post(url, query: { message: message })
+      end
+
+      html_text = '<p>'+response.parsed_response['id'] + '</p>'
+    end
+  end
 end

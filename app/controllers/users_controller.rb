@@ -37,4 +37,16 @@ class UsersController < ApplicationController
     end
     respond_with( return_html )
   end
+
+  def send_post
+    user = current_user
+    return_html = '<p></p>'
+    user = User.find(params[:user_id])
+    post_message = params[:message]
+    post_link = params[:link]
+    if user.id == current_user.id && ! post_message.blank?
+      return_html = post_to_provider( post_message, post_link, user )
+    end
+    respond_with( return_html )
+  end
 end

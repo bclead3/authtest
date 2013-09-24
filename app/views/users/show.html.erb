@@ -1,8 +1,14 @@
+
+Message:  <input id='user_bogus_message' type='text' name='message'> <br/>
+Link: <input id='user_bogus_link' type='text' name='link'> <br/>
+<div id='user_submit_action'>
+<button type='submit' >Send post</button>
+</div>
 <ul>
   <li>
     <div class='user_name'>
       <%- unless @user.nil? %>
-      <span><%= @user.name %> <%= @user.email %> <%= image_tag( @user.avatar, class:'user_image')%></span>
+        <span><%= @user.name %> <%= @user.email %> <%= image_tag( @user.avatar, class:'user_image')%></span>
         <%= get_friends(@user) %>
       <% end %>
     </div>
