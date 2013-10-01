@@ -22,7 +22,7 @@ class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable
   devise :database_authenticatable, :omniauthable, :registerable,                                #THESE WILL BE ADDED AT A LATER TIME...
-         :recoverable, :rememberable, :trackable, :validatable, omniauth_providers: [:facebook]  #, :google_oauth2, :linkedin, :twitter
+         :recoverable, :rememberable, :trackable, :validatable, omniauth_providers: [:facebook, :twitter, :linkedin]  #,:google_oauth2
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :name, :email, :password, :password_confirmation, :remember_me, :username, :provider, :uit, :avatar
@@ -36,7 +36,7 @@ class User < ActiveRecord::Base
     Authentication.find_by_provider( provider )
   end
 
-  def self.from_omniauth(auth)
+  def self.from_omniauth(auth, ip_address)
     logger.debug "auth_in_User.class:#{auth.inspect}"
     if user = User.find_by_email(auth.info.email)
       unless user.provider == (auth.provider || auth.info.provider)
@@ -48,14 +48,15 @@ class User < ActiveRecord::Base
       user.save
       user
     else
-      where(auth.slice(:provider, :uid)).first_or_create do |user|
-        user.provider = auth.provider ||= auth.info.provider
-        user.uid = auth.uid || auth.info.uid
-        user.username = auth.info.name ||= auth.info.nickname
-        user.name = auth.info.name ||= auth.info.nickname
-        user.email = auth.info.email
-        user.avatar = auth.info.image
+      user = User.find_by_current_sign_in_ip(ip_address)
+      Authentication.where(auth.slice(:provider, :uid)).first_or_create do |authentication|
+        authentication.provider = auth.provider ||= auth.info.provider
+        authentication.uid = auth.uid || auth.info.uid
+        authentication.token = auth.token
+        authentication.user = user
+        authentication.save
       end
+      user
     end
   end
 end

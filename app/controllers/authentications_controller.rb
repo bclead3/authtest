@@ -2,14 +2,18 @@ class AuthenticationsController < ApplicationController
 
   def create
     auth = request.env["omniauth.auth"]
-
+    ip_address = request.env['REMOTE_ADDR']
     logger.debug "auth:#{auth}"
 
     # Try to find stored authentication first
-    authentication = Authentication.find_by_provider_and_uid(auth['provider'], auth['uid'])
+    unless auth.nil?
+      authentication = Authentication.find_by_provider_and_uid(auth['provider'], auth['uid'])
+    else
+      authentication = Authentication.find_by_provider_and_uid(params['provider'], params['uid'])
+    end
 
     if authentication    # Authentication found, sign the user in.
-      user = User.from_omniauth(request.env["omniauth.auth"])
+      user = User.from_omniauth(request.env["omniauth.auth"], ip_address)
       authentication.token = auth.credentials.token
       if authentication.user.nil?
         authentication.user = user
@@ -21,8 +25,7 @@ class AuthenticationsController < ApplicationController
       sign_in_and_redirect(:user, authentication.user)
     else
       # Authentication not found, thus a new user.
-      user = User.new
-      user.apply_omniauth(auth)
+      user = User.from_omniauth(auth, ip_address)
       if user.save(validate: false)
         flash[:notice] = "Account created and signed in successfully."
         sign_in_and_redirect(:user, user)
@@ -34,7 +37,7 @@ class AuthenticationsController < ApplicationController
   end
 
   def google_oauth2
-    user = User.from_omniauth(request.env["omniauth.auth"])
+    user = User.from_omniauth(request.env["omniauth.auth"], request.env['REMOTE_ADDR'])
     if user.persisted?
       flash.notice = "Signed in Through Google!"
       sign_in_and_redirect user

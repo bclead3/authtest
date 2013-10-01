@@ -1,5 +1,8 @@
 Rails.application.config.middleware.use OmniAuth::Builder do
   # The following is for facebook
+  provider :linkedin, ENV['LINKED_IN_APP_ID'], ENV['LINKED_IN_SECRET']
+  provider :google_oauth2, ENV['GOOGLE_APP_ID'], ENV['GOOGLE_SECRET']
+  provider :twitter, ENV['TWITTER_APP_ID'], ENV['TWITTER_SECRET']
   provider :facebook, ENV['FACEBOOK_APP_ID'] , ENV['FACEBOOK_SECRET'] , { scope: 'ads_management,
     ads_read,
     create_event,
